@@ -18,7 +18,7 @@ Cookie Jar Solutions is committed to helping businesses harness the power of tec
 For inquiries or to learn more about our services, please reach out to us:
 
 - **Email**: [admin@cookie-jar-solutions.com](mailto:admin@cookie-jar-solutions.com)
-- **Phone**: +1-347-882-9345
+- **Phone**: +1-347-882-XXXX
 - **Address**: 145 Nassau Street, Apt 7E, New York NY, 10038
 
 ## Get in Touch
