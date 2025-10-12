@@ -14,7 +14,7 @@ I’m a native New Yorker, AI researcher and engineer blending deep technical ex
 **AI Engineer – EQTAI Lab**  
 *Apr 2025 — Present*  
 
-Work hands-on with portfolio managers and management to bring AI into the firm. Selected projects include:  
+Work hands-on with portfolio managers and management to bring AI into equities investing. Selected projects include:  
 - **Data Science Agent:** Code generation for inspection of proprietary trading data.  
 - **MCP Server Creation/Integration:** Developed proof of concept for firm strategy on MCP’s.  
 - **AI Analyst:** Customized AI that monitors sell-side research.  
