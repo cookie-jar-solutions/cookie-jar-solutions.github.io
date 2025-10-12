@@ -1,7 +1,6 @@
-/* styles.css — Modern, sleek Markdown resume theme
-   - Works with a single-column Markdown resume rendered inside .markdown-body
+/* styles.css — Modern, sleek Markdown resume theme (Light Mode Only)
+   - Single-column Markdown resume rendered inside .markdown-body
    - Responsive, print-optimized, and accessible
-   - Light + dark mode via prefers-color-scheme
 */
 
 :root{
@@ -22,18 +21,6 @@
   --leading: 1.65;
   --tight-leading: 1.35;
   --section-gap: 1.75rem;
-}
-
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0b1220;
-    --text:#e5e7eb;
-    --muted:#93a3b8;
-    --link:#60a5fa;
-    --border:#1e293b;
-    --accent:#f8fafc;
-    --chip:#0f172a;
-  }
 }
 
 *{ box-sizing:border-box; }
@@ -66,7 +53,6 @@ html, body{
   color: var(--accent);
 }
 
-/* Contact block immediately after name */
 .markdown-body h1 + p{
   margin-top: 0.15rem;
   color: var(--muted);
@@ -89,7 +75,6 @@ html, body{
   position: relative;
 }
 
-/* subtle section underline */
 .markdown-body h2::after{
   content:"";
   display:block;
@@ -107,7 +92,6 @@ html, body{
   color: var(--accent);
 }
 
-/* Role & dates line (bold location line + italic role line pattern) */
 .markdown-body p strong em,
 .markdown-body em strong{
   font-style: normal;
@@ -128,13 +112,10 @@ html, body{
   margin: 0.35rem 0;
   padding-left: 0.15rem;
 }
-/* cleaner bullets */
 .markdown-body ul > li::marker{ color: var(--muted); }
 
-/* Inline emphasis */
 .markdown-body em{ color: var(--muted); }
 
-/* Links */
 .markdown-body a{
   color: var(--link);
   text-decoration: none;
@@ -144,7 +125,6 @@ html, body{
   border-bottom-color: var(--link);
 }
 
-/* Horizontal rule as airy divider */
 .markdown-body hr{
   border: 0;
   height: 1px;
@@ -152,7 +132,6 @@ html, body{
   margin: 1.25rem 0;
 }
 
-/* Tables (if used) */
 .markdown-body table{
   width: 100%;
   border-collapse: collapse;
@@ -168,7 +147,6 @@ html, body{
   background: #f8fafc;
 }
 
-/* Helper "chip" style (use with backticks or strong small bits) */
 .markdown-body code{
   background: var(--chip);
   color: inherit;
@@ -178,8 +156,6 @@ html, body{
   font-size: 0.9em;
 }
 
-/* ---------- Cards (optional) ---------- */
-/* If you wrap any block in a <blockquote> for highlight */
 .markdown-body blockquote{
   margin: 1rem 0;
   padding: 0.9rem 1rem;
@@ -197,10 +173,7 @@ html, body{
     margin: 0;
     padding: 0 12mm;
   }
-  /* Ensure links don't show underlines/colors in print */
   a{ color: inherit !important; border: none !important; }
-  /* Avoid orphan headings at page top */
   h2, h3{ break-after: avoid; }
-  /* Keep a bit tighter spacing on paper */
   :root{ --section-gap: 1.2rem; }
 }
