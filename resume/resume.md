@@ -5,9 +5,7 @@ New York, New York, United States
 ---
 
 I’m an AI researcher and engineer blending deep technical expertise with strategic insight.  
-Across academia, startups, and large enterprises, I’ve connected advanced technology to real business outcomes.  
-Experience in insurance, cybersecurity, and financial services sharpened my ability to navigate complex systems and find leverage for growth.  
-I bring creativity, initiative, and relentless curiosity to every environment I shape.
+Across academia, startups, and large enterprises, I’ve connected advanced technology to real business outcomes. Experience in insurance, cybersecurity, and financial services sharpened my ability to navigate complex systems and find leverage for growth. I bring creativity, initiative, and relentless curiosity to every environment I shape.
 
 ---
 
