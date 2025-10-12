@@ -1,0 +1,101 @@
+/* styles.css — Resume Markdown theme */
+
+:root {
+  --text: #1f2937;         /* slate-800 */
+  --muted: #6b7280;        /* gray-500 */
+  --link: #1d4ed8;         /* blue-700 */
+  --border: #e5e7eb;       /* gray-200 */
+  --accent: #111827;       /* gray-900 for headings */
+  --bg: #ffffff;
+  --maxw: 820px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.markdown-body {
+  max-width: var(--maxw);
+  margin: 2.5rem auto;
+  padding: 0 1.25rem;
+}
+
+/* Headings */
+.markdown-body h1 {
+  font-size: 2.2rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+}
+
+.markdown-body h2 {
+  font-size: 1.4rem;
+  margin: 2rem 0 0.75rem;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.25rem;
+}
+
+.markdown-body h3 {
+  font-size: 1.05rem;
+  margin: 1rem 0 0.25rem;
+  color: var(--accent);
+}
+
+/* Paragraphs and lists */
+.markdown-body p {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin: 0.25rem 0 0.75rem 1.2rem;
+}
+
+.markdown-body li { margin: 0.2rem 0; }
+
+/* Links */
+.markdown-body a {
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(29,78,216,0.25);
+}
+.markdown-body a:hover { border-bottom-color: rgba(29,78,216,0.6); }
+
+/* Horizontal rules */
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* Tables */
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+.markdown-body th, .markdown-body td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+}
+.markdown-body th { background: #f9fafb; }
+
+/* Print tweaks */
+@media print {
+  .markdown-body {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+  a { color: inherit; text-decoration: none; border: none; }
+}
+
