@@ -9,6 +9,12 @@ Welcome to Cookie Jar Solutions! We are a leading software consulting company, p
 - **Concierge Cyber Security Services**: The digital world is a dangerous place. We can make sure you stay protected and we stay with you every step of the way. 
 - **Training and Support**: Comprehensive training and support for your team.
 
+## Our Products
+
+- **[honey](https://github.com/cookie-jar-solutions/honey)**  
+  Honey turns prompts from strings into software. A prompt-centric runtime, framework, and programming model for LLM applications.  
+  → [Hello World](https://github.com/cookie-jar-solutions/hello-honey)
+
 ## About Us
 
 Cookie Jar Solutions is committed to helping businesses harness the power of technology to achieve their goals. With years of experience in the industry, we offer unparalleled expertise and a client-centric approach to ensure your success.
