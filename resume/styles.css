@@ -1,101 +1,179 @@
-/* styles.css — Resume Markdown theme */
+/* styles.css — Modern, sleek Markdown resume theme (Light Mode Only)
+   - Single-column Markdown resume rendered inside .markdown-body
+   - Responsive, print-optimized, and accessible
+*/
 
-:root {
-  --text: #1f2937;         /* slate-800 */
-  --muted: #6b7280;        /* gray-500 */
-  --link: #1d4ed8;         /* blue-700 */
-  --border: #e5e7eb;       /* gray-200 */
-  --accent: #111827;       /* gray-900 for headings */
+:root{
   --bg: #ffffff;
-  --maxw: 820px;
+  --text: #0f172a;       /* slate-900 */
+  --muted:#64748b;       /* slate-500 */
+  --link:#2563eb;        /* blue-600 */
+  --border:#e5e7eb;      /* gray-200 */
+  --accent:#111827;      /* near-black for headings */
+  --chip:#f1f5f9;        /* slate-100 */
+  --maxw: 860px;
+  --radius: 14px;
+
+  --h1: clamp(2rem, 3.4vw, 2.6rem);
+  --h2: clamp(1.15rem, 2.0vw, 1.35rem);
+  --h3: 1.05rem;
+  --body: 16px;
+  --leading: 1.65;
+  --tight-leading: 1.35;
+  --section-gap: 1.75rem;
 }
 
-* { box-sizing: border-box; }
+*{ box-sizing:border-box; }
 
-html, body {
-  padding: 0;
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.6;
-  font-size: 16px;
+html, body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font: var(--body)/var(--leading) ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-.markdown-body {
+.markdown-body{
   max-width: var(--maxw);
-  margin: 2.5rem auto;
-  padding: 0 1.25rem;
+  margin: 48px auto;
+  padding: 0 22px 80px;
 }
 
-/* Headings */
-.markdown-body h1 {
-  font-size: 2.2rem;
-  line-height: 1.2;
-  margin: 0 0 0.5rem;
+/* ---------- Headings ---------- */
+
+.markdown-body h1{
+  font-size: var(--h1);
+  line-height: 1.1;
+  margin: 0 0 0.25rem;
+  font-weight: 750;
+  letter-spacing: 0.2px;
   color: var(--accent);
 }
 
-.markdown-body h2 {
-  font-size: 1.4rem;
-  margin: 2rem 0 0.75rem;
+.markdown-body h1 + p{
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+.markdown-body h1 + p a{
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+.markdown-body h1 + p a:hover{ border-bottom-color: currentColor; }
+
+.markdown-body h2{
+  font-size: var(--h2);
+  line-height: var(--tight-leading);
+  margin: var(--section-gap) 0 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--accent);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.25rem;
+  position: relative;
 }
 
-.markdown-body h3 {
-  font-size: 1.05rem;
+.markdown-body h2::after{
+  content:"";
+  display:block;
+  width: 56px;
+  height: 2px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, var(--border), var(--link));
+  border-radius: 2px;
+}
+
+.markdown-body h3{
+  font-size: var(--h3);
   margin: 1rem 0 0.25rem;
+  font-weight: 650;
   color: var(--accent);
 }
 
-/* Paragraphs and lists */
-.markdown-body p {
-  margin: 0.5rem 0 0.75rem;
+.markdown-body p strong em,
+.markdown-body em strong{
+  font-style: normal;
 }
 
-.markdown-body ul, .markdown-body ol {
-  margin: 0.25rem 0 0.75rem 1.2rem;
+/* ---------- Text & Lists ---------- */
+
+.markdown-body p{
+  margin: 0.35rem 0 0.75rem;
 }
 
-.markdown-body li { margin: 0.2rem 0; }
+.markdown-body ul, .markdown-body ol{
+  margin: 0.25rem 0 0.85rem 1.2rem;
+  padding: 0;
+}
 
-/* Links */
-.markdown-body a {
+.markdown-body li{
+  margin: 0.35rem 0;
+  padding-left: 0.15rem;
+}
+.markdown-body ul > li::marker{ color: var(--muted); }
+
+.markdown-body em{ color: var(--muted); }
+
+.markdown-body a{
   color: var(--link);
   text-decoration: none;
-  border-bottom: 1px solid rgba(29,78,216,0.25);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.3);
 }
-.markdown-body a:hover { border-bottom-color: rgba(29,78,216,0.6); }
+.markdown-body a:hover{
+  border-bottom-color: var(--link);
+}
 
-/* Horizontal rules */
-.markdown-body hr {
+.markdown-body hr{
   border: 0;
-  border-top: 1px solid var(--border);
-  margin: 1.5rem 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 1.25rem 0;
 }
 
-/* Tables */
-.markdown-body table {
+.markdown-body table{
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.98rem;
 }
-.markdown-body th, .markdown-body td {
-  text-align: left;
-  padding: 0.5rem 0.6rem;
+.markdown-body th, .markdown-body td{
   border: 1px solid var(--border);
+  padding: 0.55rem 0.6rem;
+  text-align: left;
 }
-.markdown-body th { background: #f9fafb; }
+.markdown-body th{
+  background: #f8fafc;
+}
 
-/* Print tweaks */
-@media print {
-  .markdown-body {
+.markdown-body code{
+  background: var(--chip);
+  color: inherit;
+  padding: 0.18rem 0.4rem;
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+.markdown-body blockquote{
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border-left: 4px solid var(--link);
+  background: rgba(148, 163, 184, 0.12);
+  color: inherit;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* ---------- Print Styles ---------- */
+
+@media print{
+  :root{ --maxw: 100%; }
+  .markdown-body{
     margin: 0;
-    padding: 0;
-    max-width: 100%;
+    padding: 0 12mm;
   }
-  a { color: inherit; text-decoration: none; border: none; }
+  a{ color: inherit !important; border: none !important; }
+  h2, h3{ break-after: avoid; }
+  :root{ --section-gap: 1.2rem; }
 }
-
