@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ghostty config</title>
+
+  <!-- Prism (syntax highlighting) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <!-- Use "ini" highlighting (works well for key=value configs) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-ini.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f14;
+      --card: #0f1620;
+      --border: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.9);
+      --muted: rgba(255,255,255,.65);
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, #142033 0%, var(--bg) 60%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+    }
+    .badge {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    button:hover { background: rgba(255,255,255,.10); }
+    button:active { transform: translateY(1px); }
+
+    /* Prism tweaks */
+    pre {
+      margin: 0;
+      padding: 16px 16px 18px;
+      overflow: auto;
+      background: transparent !important;
+    }
+    code { font-size: 13px; }
+    .footer {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Ghostty config</h1>
+      <p class="hint">No line numbers • Copy button included</p>
+    </header>
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="badge">ghostty.conf</div>
+        <button id="copyBtn" type="button">Copy</button>
+      </div>
+
+      <pre><code id="cfg" class="language-ini"># ==============================
+# Ghostty - Developer Profile
+# ==============================
+
+# Font
+font-family = "JetBrains Mono"
+font-size = 15
+# Disable most ligatures (cleaner diffs + code)
+font-feature = -calt, -liga, -dlig
+
+# builtin thmemes for ghostty
+theme = Solarized Osaka Night
+
+# Comfortable spacing
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+
+cursor-style = block
+cursor-color = #ffcc00
+cursor-text = #002b36
+
+# Stop shell integration from overriding the cursor at the prompt
+shell-integration-features = no-cursor</code></pre>
+    </div>
+
+    <div class="footer" id="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('copyBtn');
+    const codeEl = document.getElementById('cfg');
+    const status = document.getElementById('status');
+
+    btn.addEventListener('click', async () => {
+      const text = codeEl.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied to clipboard.";
+        setTimeout(() => (status.textContent = ""), 1500);
+      } catch (e) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        status.textContent = "Copied (fallback).";
+        setTimeout(() => (status.textContent = ""), 1500);
+      }
+    });
+  </script>
+</body>
+</html>
