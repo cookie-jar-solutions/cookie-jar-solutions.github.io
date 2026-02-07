@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>.vimrc</title>
+
+  <!-- Prism (syntax highlighting) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-vim.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f14;
+      --card: #0f1620;
+      --border: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.9);
+      --muted: rgba(255,255,255,.65);
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, #142033 0%, var(--bg) 60%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+    }
+    .badge {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    button:hover { background: rgba(255,255,255,.10); }
+    button:active { transform: translateY(1px); }
+
+    pre {
+      margin: 0;
+      padding: 16px 16px 18px;
+      overflow: auto;
+      background: transparent !important;
+    }
+    code { font-size: 13px; }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>.vimrc</h1>
+      <p class="hint">No line numbers • Copy button included</p>
+    </header>
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="badge">~/.vimrc</div>
+        <button id="copyBtn" type="button">Copy</button>
+      </div>
+
+      <pre><code id="cfg" class="language-vim">" ==========================================================
+" ~/.vimrc
+" Portable Python + Git + AI terminal development environment
+" ==========================================================
+
+" ------------------ Basics ------------------
+set nocompatible
+filetype plugin indent on
+syntax on
+
+set number
+set relativenumber
+set termguicolors
+
+set hidden
+set updatetime=300
+" set signcolumn=yes
+
+" Leader
+let mapleader="\\"
+
+" ==========================================================
+" Smart Autoformat + Autosave
+" ==========================================================
+" We format BEFORE saving to disk.
+
+" Run Ruff fixer right before a file write
+augroup ruff_format_on_write
+  autocmd!
+  autocmd BufWritePre *.py silent! ALEFix
+augroup END
+
+" Leaving insert mode triggers the save (which triggers formatting first)
+augroup autosave_on_insertleave
+  autocmd!
+  autocmd InsertLeave * silent! write
+augroup END
+
+" ==========================================================
+" Keymaps
+" ==========================================================
+
+" Quit / Write
+nnoremap <silent> <leader>q :q&lt;CR&gt;
+nnoremap <silent> <leader>w :w&lt;CR&gt;
+
+" Tabs
+nnoremap <silent> <leader>t :tabnew&lt;CR&gt;
+nnoremap <silent> <leader>h :tabnext&lt;CR&gt;
+nnoremap <silent> <leader>g :tabprevious&lt;CR&gt;
+
+" Window navigation
+nnoremap <silent> <leader>e &lt;C-w&gt;k
+nnoremap <silent> <leader>f &lt;C-w&gt;l
+nnoremap <silent> <leader>d &lt;C-w&gt;h
+nnoremap <silent> <leader>c &lt;C-w&gt;j
+
+" Splits
+nnoremap <silent> <leader>s :split&lt;CR&gt;
+nnoremap <silent> <leader>v :vsplit&lt;CR&gt;
+
+" Terminal in new tab
+nnoremap <silent> <leader>x :tabnew &lt;Bar&gt; terminal ++curwin&lt;CR&gt;
+
+" Leave terminal mode back to Vim normal mode
+tnoremap <silent> <leader>z &lt;C-\&gt;&lt;C-n&gt;
+
+" nnn file browser in new tab
+function! OpenNnnInNewTab()
+  tabnew
+  execute 'NnnPicker'
+endfunction
+nnoremap <silent> <leader>n :call OpenNnnInNewTab()&lt;CR&gt;
+
+" ==========================================================
+" Plugins (vim-plug)
+" ==========================================================
+" Install vim-plug first if needed:
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+call plug#begin('~/.vim/plugged')
+
+" Linting / formatting engine
+Plug 'dense-analysis/ale'
+
+" AI completion
+Plug 'github/copilot.vim'
+
+" File navigation
+Plug 'mcchrish/nnn.vim'
+
+" Git integration
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+call plug#end()
+
+" ==========================================================
+" ALE + Ruff (uv-aware)
+" ==========================================================
+
+" Detect .venv automatically (works with uv)
+let g:ale_python_auto_virtualenv = 1
+let g:ale_python_ruff_executable = 'ruff'
+
+" Use Ruff as linter
+let g:ale_linters = {
+\   'python': ['ruff'],
+\}
+
+" Ruff fixes: lint, organize imports, format
+let g:ale_fixers = {
+\   'python': ['ruff', 'ruff_format'],
+\}
+
+" We manually run fixes on write via BufWritePre
+let g:ale_fix_on_save = 0
+
+" Lint responsiveness
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_text_changed = 'normal'
+
+" UI behavior
+let g:ale_echo_cursor = 1
+let g:ale_virtualtext_cursor = 1
+let g:ale_completion_enabled = 0
+
+" ==========================================================
+" Python provider
+" ==========================================================
+" Prevents Vim from grabbing wrong system python
+let g:python3_host_prog = '/usr/bin/python3'
+
+" ==========================================================
+" Copilot
+" ==========================================================
+let g:copilot_enabled = 1
+
+" (Optional alternative accept key)
+" let g:copilot_no_tab_map = v:true
+" imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+
+" ==========================================================
+" nnn settings
+" ==========================================================
+let g:nnn#set_default_mappings = 1
+
+" ==========================================================
+" GitGutter behavior
+" ==========================================================
+let g:gitgutter_enabled = 1
+let g:gitgutter_map_keys = 0</code></pre>
+    </div>
+
+    <div class="footer" id="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('copyBtn');
+    const codeEl = document.getElementById('cfg');
+    const status = document.getElementById('status');
+
+    btn.addEventListener('click', async () => {
+      const text = codeEl.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied to clipboard.";
+        setTimeout(() => (status.textContent = ""), 1500);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        status.textContent = "Copied (fallback).";
+        setTimeout(() => (status.textContent = ""), 1500);
+      }
+    });
+  </script>
+</body>
+</html>
