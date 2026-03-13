@@ -11,8 +11,16 @@ I’m a native New Yorker, AI researcher and engineer blending deep technical ex
 ## Career Experience
 
 ### **Millennium Management, New York City**  
-**AI Engineer – EQTAI Lab**  
-*Apr 2025 — Present*  
+**AI Engineer - Equities Management**
+*Dec 2025 - Apr 2026*
+
+Worked directly with equities management to bring AI to the forefront of their process Selected projects include:
+- **AIAnthony:** An email integrated chat bot personalized to the workflows and datasets proprietary to MLP equities management.
+- **AI Driven Expense Analysis:** Identified opportunities for data fee reductions using AI driven analysis.
+- **AI Based Email Reporting:** Developed specialized AI driven reports to keep senior leadership up to date on all SPM reported activity within equities.
+  
+**AI Engineer – Equities AI**  
+*Apr 2025 — Nov 2025*  
 
 Work hands-on with portfolio managers and management to bring AI into equities investing. Selected projects include:  
 - **Data Science Agent:** Code generation for inspection of proprietary trading data.  
