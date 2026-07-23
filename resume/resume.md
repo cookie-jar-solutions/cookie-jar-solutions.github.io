@@ -11,7 +11,7 @@ I’m a native New Yorker, AI researcher and engineer blending deep technical ex
 ## Career Experience
 
 ### **AIVC, New York City**
-**Commander - Intelligence Command**
+**Partner**
 *May 2026 - Present*
 
 Early joiner at AIVC (“Value Creation”), a startup delivering AI solutions to organizations lacking in-house capabilities; combine consulting and hands-on engineering to drive measurable business outcomes, with success tied directly to client results.
