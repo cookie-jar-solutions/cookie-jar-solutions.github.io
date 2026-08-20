@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lance &amp; Dakota — A Denver Year</title>
+<meta name="description" content="A living piece of art: one leaf for every day of Denver weather since Lance and Dakota's wedding.">
+<style>
+  :root{
+    --ink:#0e1320;
+    --ink-2:#141b2b;
+    --paper:#f4efe6;
+    --paper-dim:#a9a49b;
+    --rule:rgba(244,239,230,.14);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+  body{
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #1b2438 0%, rgba(27,36,56,0) 70%),
+      var(--ink);
+    color:var(--paper);
+    font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:56px 24px 96px}
+
+  header{text-align:center;margin-bottom:14px}
+  .names{
+    font-size:clamp(30px,6vw,52px);
+    letter-spacing:.06em;
+    font-weight:400;
+    margin:0 0 14px;
+    line-height:1.1;
+  }
+  .names .amp{font-style:italic;opacity:.6;padding:0 .12em}
+  .dedication{
+    font-size:14px;
+    line-height:1.75;
+    color:var(--paper-dim);
+    max-width:min(38em,100%);
+    margin:0 auto;
+    font-style:italic;
+  }
+  .rule{
+    width:64px;height:1px;background:var(--rule);
+    margin:26px auto;border:0;
+  }
+
+  .stats{
+    display:flex;flex-wrap:wrap;justify-content:center;
+    gap:0;margin:0 auto 34px;
+  }
+  .stat{
+    padding:0 22px;text-align:center;min-width:104px;
+    border-left:1px solid var(--rule);
+  }
+  .stat:first-child{border-left:0}
+  .stat .v{display:block;font-size:22px;letter-spacing:.02em;line-height:1.3}
+  .stat .k{
+    display:block;font-family:var(--sans);font-size:9.5px;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--paper-dim);margin-top:6px;
+  }
+  .stat .v .u{font-size:13px;opacity:.55;margin-left:1px}
+
+  .canvas{
+    position:relative;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  .canvas svg{display:block;margin:0 auto;max-width:100%;width:100%;height:auto}
+  .leaf{cursor:pointer}
+  .leaf:hover .blade{stroke:var(--paper);stroke-width:1.1}
+
+  .tip{
+    position:absolute;pointer-events:none;opacity:0;
+    transform:translate(-50%,-118%);
+    transition:opacity .12s ease;
+    background:rgba(8,11,18,.94);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:9px 13px;
+    font-family:var(--sans);
+    white-space:nowrap;
+    z-index:5;
+    box-shadow:0 8px 30px rgba(0,0,0,.5);
+  }
+  .tip.on{opacity:1}
+  .tip .d{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--paper-dim)}
+  .tip .t{font-size:16px;margin-top:5px;font-family:var(--serif)}
+  .tip .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+
+  .legend{margin:42px auto 0;max-width:520px}
+  .legend .bar{height:9px;border-radius:5px;border:1px solid var(--rule)}
+  .legend .ticks{
+    display:flex;justify-content:space-between;
+    font-family:var(--sans);font-size:10px;letter-spacing:.1em;
+    color:var(--paper-dim);margin-top:9px;
+  }
+  .legend .cap{
+    text-align:center;font-family:var(--sans);font-size:9.5px;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--paper-dim);margin-top:18px;
+  }
+
+  .note{
+    text-align:center;color:var(--paper-dim);font-size:13px;
+    line-height:1.7;margin-top:44px;font-style:italic;
+  }
+  .msg{
+    text-align:center;padding:80px 20px;color:var(--paper-dim);
+    font-size:15px;line-height:1.8;
+  }
+  @media (max-width:640px){
+    /* Every pixel spent on chrome is a pixel the tree cannot have, and on a
+       phone the tree is the point. Tighten everything around it. */
+    .wrap{padding:24px 14px 30px}
+    .names{font-size:clamp(26px,7vw,38px);margin-bottom:10px}
+    .dedication{font-size:12.5px;line-height:1.6}
+    .rule{margin:16px auto}
+    .legend{margin-top:22px}
+    .legend .cap{margin-top:12px}
+    .note{margin-top:22px;font-size:12px;line-height:1.6}
+    /* a wrapping flex row leaves an orphan stat on its own line; a fixed
+       grid keeps the numbers in tidy columns instead */
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px 0;
+      max-width:340px;
+      margin-bottom:18px;
+    }
+    .stat{padding:0 6px;min-width:0;border-left:1px solid var(--rule)}
+    .stat:nth-child(3n+1){border-left:0}
+    .stat .v{font-size:19px}
+    .stat .k{font-size:9px;letter-spacing:.1em}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1 class="names">Lance <span class="amp">&amp;</span> Dakota</h1>
+    <p class="dedication">
+      Every day since you were married, Denver has written down a low and a high.
+      Here is each of those days as a single leaf — cool at the stem, warm at the tip.
+      A new one unfolds every morning. The tree will keep growing for as long as you do.
+    </p>
+  </header>
+
+  <hr class="rule">
+
+  <div class="stats" id="stats"></div>
+
+  <div class="canvas" id="canvas">
+    <div class="msg" id="msg">Gathering the weather…</div>
+    <div class="tip" id="tip"></div>
+  </div>
+
+  <div class="legend">
+    <div class="bar" id="legendBar"></div>
+    <div class="ticks" id="legendTicks"></div>
+    <div class="cap">Daily low &rarr; daily high, in degrees Fahrenheit</div>
+  </div>
+
+  <p class="note">
+    Weather observations for Denver, Colorado, from Open-Meteo.<br>
+    Touch or hover any leaf to read its day.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     THE ONLY LINE YOU NEED TO CHANGE.
+     Set this to Lance and Dakota's actual wedding date, YYYY-MM-DD.
+     Leaf number one is this day. Everything else follows from it.
+     ===================================================================== */
+  var WEDDING_DATE = "2026-08-21";
+
+  /* Denver, Colorado */
+  var LAT = 39.7392, LON = -104.9847, TZ = "America/Denver";
+
+  var CACHE_KEY = "ld-denver-weather-v1";
+
+  /* ---------------------------------------------------------------------
+     Temperature -> color. Blue at the bottom of the world, red at the top.
+     Anchors are degrees Fahrenheit. Deliberately no green, so the leaves
+     read as temperature rather than as foliage.
+     --------------------------------------------------------------------- */
+  var RAMP = [
+    [-50, [ 36,  26,  94]],
+    [-30, [ 43,  63, 158]],
+    [-10, [ 47, 111, 196]],
+    [ 10, [ 74, 158, 212]],
+    [ 32, [127, 198, 220]],
+    [ 45, [185, 219, 221]],
+    [ 55, [240, 227, 184]],
+    [ 68, [242, 196, 106]],
+    [ 80, [232, 145,  63]],
+    [ 90, [217,  95,  43]],
+    [100, [185,  29,  29]],
+    [115, [110,  12,  24]]
+  ];
+
+  function colorAt(f){
+    if (f <= RAMP[0][0]) return rgb(RAMP[0][1]);
+    var last = RAMP.length - 1;
+    if (f >= RAMP[last][0]) return rgb(RAMP[last][1]);
+    for (var i = 0; i < last; i++){
+      var a = RAMP[i], b = RAMP[i+1];
+      if (f >= a[0] && f <= b[0]){
+        var t = (f - a[0]) / (b[0] - a[0]);
+        return rgb([
+          Math.round(a[1][0] + (b[1][0] - a[1][0]) * t),
+          Math.round(a[1][1] + (b[1][1] - a[1][1]) * t),
+          Math.round(a[1][2] + (b[1][2] - a[1][2]) * t)
+        ]);
+      }
+    }
+    return rgb(RAMP[last][1]);
+  }
+  function rgb(c){ return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")"; }
+
+  /* ------------------------------- dates ------------------------------- */
+  function iso(d){
+    return d.getFullYear() + "-" +
+      String(d.getMonth()+1).padStart(2,"0") + "-" +
+      String(d.getDate()).padStart(2,"0");
+  }
+  function parseISO(s){
+    var p = s.split("-");
+    return new Date(+p[0], +p[1]-1, +p[2]);
+  }
+  function shift(d, days){
+    var n = new Date(d.getTime());
+    n.setDate(n.getDate() + days);
+    return n;
+  }
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var MON_LONG = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+
+  /* ------------------------------- fetch ------------------------------- */
+  var BASE = "&latitude=" + LAT + "&longitude=" + LON +
+             "&daily=temperature_2m_max,temperature_2m_min" +
+             "&temperature_unit=fahrenheit&timezone=" + TZ;
+
+  function unpack(json, into){
+    if (!json || !json.daily || !json.daily.time) return;
+    var t = json.daily.time,
+        hi = json.daily.temperature_2m_max,
+        lo = json.daily.temperature_2m_min;
+    for (var i = 0; i < t.length; i++){
+      if (hi[i] === null || lo[i] === null) continue;
+      if (into[t[i]]) continue;              /* first source wins */
+      into[t[i]] = { date: t[i], min: lo[i], max: hi[i] };
+    }
+  }
+
+  function getJSON(url){
+    return fetch(url).then(function(r){
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+  }
+
+  /* The archive endpoint runs a few days behind, so the recent tail comes
+     from the forecast endpoint's past_days. Between them there are no holes,
+     and the whole history is rebuilt from scratch on every single visit. */
+  function loadDays(startISO, endISO){
+    var archiveEnd = iso(shift(parseISO(endISO), -6));
+
+    var recent = getJSON(
+      "https://api.open-meteo.com/v1/forecast?past_days=92&forecast_days=1" + BASE
+    ).catch(function(){ return null; });
+
+    var history = (archiveEnd >= startISO)
+      ? getJSON("https://archive-api.open-meteo.com/v1/archive?start_date=" +
+                startISO + "&end_date=" + archiveEnd + BASE).catch(function(){ return null; })
+      : Promise.resolve(null);
+
+    /* The two requests race, so merge in a fixed order rather than in
+       whichever .then lands first. The archive is the settled record and
+       wins the two-month overlap; the forecast only fills the recent tail
+       the archive has not caught up to yet. */
+    return Promise.all([history, recent]).then(function(res){
+      var byDate = {};
+      unpack(res[0], byDate);   /* archive first  */
+      unpack(res[1], byDate);   /* forecast fills */
+      return Object.keys(byDate).sort().filter(function(d){
+        return d >= startISO && d <= endISO;
+      }).map(function(d){ return byDate[d]; });
+    });
+  }
+
+  function readCache(){
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      if (o && o.start === WEDDING_DATE && o.days && o.days.length) return o.days;
+    } catch(e){}
+    return null;
+  }
+  function writeCache(days){
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ start: WEDDING_DATE, days: days }));
+    } catch(e){}
+  }
+
+  /* ------------------------------ geometry ----------------------------- */
+  /* Layout, filled in by setLayout(). On a phone the tree is drawn on a
+     narrower canvas with proportionally larger type, rather than scaling the
+     wide desktop tree down until the month labels are unreadable. */
+  var W, TRUNK_X, PAD_TOP, PAD_BOT, ROW, ROW_MAX, ROW_MIN, LEAF_LEN, LEAF_W,
+      REACH_MIN, REACH_MAX, RISE, CLEAR, W_BASE_MAX, W_TIP, LABEL_PX, narrow;
+
+  function setLayout(px){
+    narrow = px < 620;
+    W          = narrow ? 540 : 900;
+    TRUNK_X    = W / 2;
+    PAD_TOP    = narrow ? 42  : 52;
+    PAD_BOT    = narrow ? 58  : 74;
+    /* Row spacing is chosen per render to fit the screen; these are the
+       bounds it is allowed to pick between. */
+    ROW_MAX    = narrow ? 46  : 60;
+    ROW_MIN    = narrow ? 21  : 26;
+    LEAF_LEN   = narrow ? 13  : 17;
+    LEAF_W     = narrow ? 4.4 : 5.6;
+    REACH_MIN  = narrow ? 52  : 76;
+    REACH_MAX  = narrow ? 176 : 300;
+    RISE       = narrow ? 34  : 46;
+    CLEAR      = narrow ? 34  : 44;
+    W_BASE_MAX = narrow ? 24  : 34;
+    W_TIP      = narrow ? 2.6 : 3.2;
+    /* the narrow canvas is scaled down to fit, so type must be scaled up
+       by the same factor to land at the same size on screen */
+    LABEL_PX   = narrow ? 14  : 9.5;
+    ROW        = ROW_MAX;
+  }
+
+  /* Height the tree may occupy: the viewport minus everything else on the
+     page. Measured by subtracting the canvas from the wrapper, so it does
+     not drift as the tree itself changes size. */
+  function availHeight(){
+    var wrap = document.querySelector(".wrap"),
+        canvas = document.getElementById("canvas");
+    if (!wrap || !canvas) return 620;
+    var others = wrap.scrollHeight - canvas.offsetHeight;
+    return Math.max(300, (window.innerHeight || 800) - others - 16);
+  }
+
+  /* Deterministic jitter, so the tree looks hand-grown but renders
+     identically every visit. */
+  function wobble(i, salt){
+    var x = Math.sin((i + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+    return (x - Math.floor(x)) * 2 - 1;   /* -1 .. 1 */
+  }
+
+  function qPoint(p0, p1, p2, t){
+    var u = 1 - t;
+    return {
+      x: u*u*p0.x + 2*u*t*p1.x + t*t*p2.x,
+      y: u*u*p0.y + 2*u*t*p1.y + t*t*p2.y
+    };
+  }
+  function qTangent(p0, p1, p2, t){
+    var u = 1 - t;
+    return {
+      x: 2*u*(p1.x-p0.x) + 2*t*(p2.x-p1.x),
+      y: 2*u*(p1.y-p0.y) + 2*t*(p2.y-p1.y)
+    };
+  }
+
+  /* A branch is a filled shape, not a stroke: it starts thick where it
+     leaves the trunk and comes to a point at the tip, so it reads as wood.
+     A constant-width stroke reads as an underline. */
+  function taperedLimb(p0, p1, p2, wBase, wTip, steps){
+    var up = [], down = [];
+    for (var i = 0; i <= steps; i++){
+      var t   = i / steps;
+      var pt  = qPoint(p0, p1, p2, t);
+      var tan = qTangent(p0, p1, p2, t);
+      var len = Math.sqrt(tan.x*tan.x + tan.y*tan.y) || 1;
+      var nx  = -tan.y / len, ny = tan.x / len;
+      var hw  = (wBase + (wTip - wBase) * t) / 2;
+      up.push([pt.x + nx*hw, pt.y + ny*hw]);
+      down.push([pt.x - nx*hw, pt.y - ny*hw]);
+    }
+    var d = "M" + up[0][0].toFixed(2) + "," + up[0][1].toFixed(2);
+    for (var a = 1; a < up.length; a++) d += " L" + up[a][0].toFixed(2) + "," + up[a][1].toFixed(2);
+    for (var b = down.length - 1; b >= 0; b--) d += " L" + down[b][0].toFixed(2) + "," + down[b][1].toFixed(2);
+    return d + " Z";
+  }
+
+  function el(name, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (var k in attrs) if (attrs.hasOwnProperty(k)) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  /* -------------------------------- draw ------------------------------- */
+  function draw(days){
+    /* group the days into months, oldest first */
+    var months = [], index = {};
+    days.forEach(function(d){
+      var key = d.date.slice(0,7);
+      if (!index[key]){
+        index[key] = { key: key, year: +key.slice(0,4), mon: +key.slice(5,7) - 1, days: [] };
+        months.push(index[key]);
+      }
+      index[key].days.push(d);
+    });
+
+    /* Compress the rows so the whole tree fits the screen. Twelve branches a
+       year means no fixed spacing survives contact with year three, so the
+       spacing is derived rather than declared — down to ROW_MIN, past which
+       the page is allowed to scroll instead of turning to mush. */
+    var gaps = Math.max(0, months.length - 1);
+    ROW = gaps
+      ? Math.max(ROW_MIN, Math.min(ROW_MAX,
+          (availHeight() - PAD_TOP - PAD_BOT - CLEAR) / gaps))
+      : ROW_MAX;
+
+    /* Leaves and branch lift have to shrink with the rows or tight branches
+       grow into each other. */
+    var squeeze  = Math.max(0.42, Math.min(1, ROW / ROW_MAX));
+    var leafLen  = LEAF_LEN * (0.55 + 0.45 * squeeze);
+    var leafWid  = LEAF_W   * (0.55 + 0.45 * squeeze);
+    var riseCap  = Math.min(RISE, ROW * 0.64);
+
+    var H = PAD_TOP + PAD_BOT + CLEAR + gaps * ROW;
+    var baseY  = H - PAD_BOT;        /* where the trunk meets the ground */
+    var firstY = baseY - CLEAR;      /* where the oldest branch leaves it */
+
+    var svg = el("svg", {
+      viewBox: "0 0 " + W + " " + H,
+      role: "img",
+      "aria-label": "A tree with one leaf for every day since the wedding, each leaf " +
+                    "colored from that day's low temperature to its high."
+    });
+
+    var defs = el("defs");
+    svg.appendChild(defs);
+
+    /* One gradient per distinct low/high pair, rounded into 2-degree
+       buckets so a long history reuses defs instead of exploding. */
+    var gradCache = {};
+    function gradientFor(lo, hi){
+      var key = Math.round(lo/2) + "_" + Math.round(hi/2);
+      if (gradCache[key]) return gradCache[key];
+      var id = "g" + key.replace(/-/g, "n");
+      var g = el("linearGradient", { id: id, x1: "0", y1: "0", x2: "1", y2: "0" });
+      var s1 = el("stop", { offset: "0%",  "stop-color": colorAt(lo) });
+      var s2 = el("stop", { offset: "100%","stop-color": colorAt(hi) });
+      g.appendChild(s1); g.appendChild(s2);
+      defs.appendChild(g);
+      gradCache[key] = id;
+      return id;
+    }
+
+    /* ---- ground: one quiet line, passing exactly through the foot of the
+           trunk so the tree is planted rather than hovering ---- */
+    svg.appendChild(el("path", {
+      /* The control point is NOT on the curve: with ends at +15 the curve
+         only reaches +2 at centre when the control sits at -11. */
+      d: "M" + (TRUNK_X - 250) + "," + (baseY + 15) +
+         " Q" + (TRUNK_X + 5) + "," + (baseY - 11) +
+         " "  + (TRUNK_X + 260) + "," + (baseY + 15),
+      fill: "none", stroke: "rgba(244,239,230,.20)", "stroke-width": "1.1"
+    }));
+
+    /* ---- trunk: thick at the roots, tapering to the newest growth ---- */
+    var topY = firstY - Math.max(0, months.length - 1) * ROW;
+    var tipY = topY - 32;
+
+    /* A gentle lean, so the trunk is grown rather than drawn with a ruler. */
+    var t0 = { x: TRUNK_X + 5, y: baseY },
+        t2 = { x: TRUNK_X - 7, y: tipY },
+        t1 = { x: TRUNK_X + 17, y: (baseY + tipY) / 2 };
+
+    var trunkGrad = el("linearGradient", {
+      id: "trunkGrad", x1: "0", y1: "1", x2: "0", y2: "0"
+    });
+    trunkGrad.appendChild(el("stop", { offset: "0%",   "stop-color": "rgba(244,239,230,.36)" }));
+    trunkGrad.appendChild(el("stop", { offset: "100%", "stop-color": "rgba(244,239,230,.17)" }));
+    defs.appendChild(trunkGrad);
+
+    /* The trunk thickens with age. A tree three months old should be a
+       sapling, not a stump with a wide flare stuck on it. */
+    var wBase   = Math.min(W_BASE_MAX, 7 + months.length * 1.9);
+    var flareH  = wBase * 1.85;
+    var flareOut = wBase;
+
+    svg.appendChild(el("path", {
+      d: taperedLimb(t0, t1, t2, wBase, W_TIP, 48),
+      fill: "url(#trunkGrad)"
+    }));
+
+    /* Root flare. The outer edge has to be CONCAVE — pulled back toward the
+       trunk — or the base reads as a lamp-post pedestal rather than a tree
+       swelling into the ground. */
+    var hwb = wBase / 2;
+    [-1, 1].forEach(function(sd){
+      var edge = t0.x + sd * hwb;
+      svg.appendChild(el("path", {
+        d: "M" + edge + "," + (baseY - flareH) +
+           " C" + (edge + sd * flareOut * 0.03) + "," + (baseY - flareH * 0.42) +
+           " "  + (edge + sd * flareOut * 0.32) + "," + (baseY - flareH * 0.11) +
+           " "  + (edge + sd * flareOut)        + "," + (baseY + 2) +
+           " L" + edge + "," + (baseY + 2) + " Z",
+        fill: "rgba(244,239,230,.30)"
+      }));
+    });
+
+    /* bark: a couple of faint striations following the trunk, so the fill
+       is not a flat slab of grey */
+    [-0.34, 0.12, 0.46].forEach(function(off, k){
+      var b0 = { x: t0.x + off * hwb,        y: baseY - 30 },
+          b2 = { x: t2.x + off * (W_TIP/2),  y: tipY + 40 },
+          b1 = { x: t1.x + off * hwb * 0.6,  y: (baseY + tipY) / 2 };
+      svg.appendChild(el("path", {
+        d: "M" + b0.x + "," + b0.y + " Q" + b1.x + "," + b1.y + " " + b2.x + "," + b2.y,
+        fill: "none",
+        stroke: k === 1 ? "rgba(14,19,32,.13)" : "rgba(244,239,230,.09)",
+        "stroke-width": k === 1 ? "1.4" : "1"
+      }));
+    });
+
+    /* Because the trunk leans, a branch has to leave from wherever the
+       trunk actually is at that height, not from a fixed centre line. */
+    var spine = [];
+    for (var s = 0; s <= 240; s++){
+      spine.push(qPoint(t0, t1, t2, s / 240));
+    }
+    function trunkXAt(y){
+      for (var i = 0; i < spine.length - 1; i++){
+        var a = spine[i], b = spine[i+1];
+        if ((y <= a.y && y >= b.y) || (y >= a.y && y <= b.y)){
+          var span = (a.y - b.y);
+          var f = span === 0 ? 0 : (a.y - y) / span;
+          return a.x + (b.x - a.x) * f;
+        }
+      }
+      return y > spine[0].y ? spine[0].x : spine[spine.length-1].x;
+    }
+    function trunkHalfWidthAt(y){
+      var f = (baseY - y) / Math.max(1, baseY - tipY);
+      return (wBase + (W_TIP - wBase) * f) / 2;
+    }
+
+    /* ---- branches, oldest at the bottom ---- */
+    var coldest = null, warmest = null;
+
+    months.forEach(function(m, mi){
+      var y    = firstY - mi * ROW;
+      var side = (mi % 2 === 0) ? 1 : -1;
+      var n    = m.days.length;
+
+      /* month length is set by how much of it has actually happened */
+      var fill  = Math.min(1, (n - 1) / 30);
+      var reach = REACH_MIN + (REACH_MAX - REACH_MIN) * fill;
+
+      /* let each branch find its own length and lift, so the tree does not
+         look like a ladder */
+      reach *= 1 + wobble(mi, 1.7) * 0.07;
+      var rise = riseCap * (1 + wobble(mi, 4.2) * 0.22);
+
+      var tx = trunkXAt(y);
+      var p0 = { x: tx + side * (trunkHalfWidthAt(y) - 1), y: y + 2 };
+      var p2 = { x: tx + side * reach, y: y - rise };
+      var p1 = { x: tx + side * reach * 0.52, y: y + 6 };
+
+      var g = el("g");
+
+      g.appendChild(el("path", {
+        d: taperedLimb(p0, p1, p2, 5.2, 1.1, 20),
+        fill: "rgba(244,239,230,.26)"
+      }));
+
+      /* The label sits past the last leaf, at this branch's own tip, so it
+         can only be read as belonging to this branch. Near the trunk it
+         would fall between two branches and name neither. */
+      var lab = el("text", {
+        x: p2.x + side * 17,
+        y: p2.y + 3.5,
+        fill: "rgba(244,239,230,.42)",
+        "font-family": "ui-sans-serif, -apple-system, Helvetica, Arial, sans-serif",
+        "font-size": LABEL_PX,
+        "letter-spacing": narrow ? 1.2 : 1.7,
+        "text-anchor": side === 1 ? "start" : "end"
+      });
+      lab.textContent = MON[m.mon].toUpperCase() + " " + String(m.year).slice(2);
+      g.appendChild(lab);
+
+      m.days.forEach(function(d, di){
+        if (!coldest || d.min < coldest.min) coldest = d;
+        if (!warmest || d.max > warmest.max) warmest = d;
+
+        /* leaves start a little way out from the trunk and run to the tip */
+        var t   = 0.14 + 0.84 * (n === 1 ? 0.55 : di / (n - 1));
+        var pt  = qPoint(p0, p1, p2, t);
+        var tan = qTangent(p0, p1, p2, t);
+        var base = Math.atan2(tan.y, tan.x) * 180 / Math.PI;
+
+        /* Alternate above and below the spine, with every third leaf shorter
+           and swept forward, so a full month reads lush instead of like a
+           chain. The jitter keeps it from looking machined. */
+        var lane = di % 3;
+        var flip = (lane === 0) ? -1 : (lane === 1 ? 1 : (di % 6 === 2 ? -1 : 1));
+        /* lay the leaves flatter along the branch as rows tighten, so they
+           take less vertical room */
+        var spread = ((lane === 2) ? 22 : 52) * (0.62 + 0.38 * squeeze);
+        var angle  = base + flip * (spread + wobble(di, m.mon) * 9);
+        var len    = leafLen * (lane === 2 ? 0.74 : 1) * (1 + wobble(di, 3.1) * 0.11);
+        var wid    = leafWid * (lane === 2 ? 0.78 : 1);
+
+        /* nudge each leaf slightly off the spine so stems don't all collide */
+        pt.x += wobble(di, 7.7) * 2.2 * squeeze;
+        pt.y += wobble(di, 5.3) * 2.2 * squeeze;
+
+        var leaf = el("g", {
+          class: "leaf",
+          transform: "translate(" + pt.x.toFixed(2) + "," + pt.y.toFixed(2) +
+                     ") rotate(" + angle.toFixed(2) + ")",
+          "data-date": d.date,
+          "data-min": d.min,
+          "data-max": d.max,
+          tabindex: "0",
+          role: "img"
+        });
+        var title = el("title");
+        title.textContent = prettyDate(d.date) + " — low " +
+                            Math.round(d.min) + "°, high " + Math.round(d.max) + "°";
+        leaf.appendChild(title);
+
+        leaf.appendChild(el("path", {
+          class: "blade",
+          d: "M0,0 C" + (len*0.26) + "," + (-wid) + " " + (len*0.74) + "," + (-wid) +
+             " " + len + ",0 C" + (len*0.74) + "," + wid + " " + (len*0.26) + "," + wid + " 0,0 Z",
+          fill: "url(#" + gradientFor(d.min, d.max) + ")",
+          stroke: "rgba(14,19,32,.55)",
+          "stroke-width": ".5"
+        }));
+        leaf.appendChild(el("path", {
+          d: "M0,0 L" + (len*0.94) + ",0",
+          stroke: "rgba(14,19,32,.30)",
+          "stroke-width": ".55",
+          fill: "none"
+        }));
+
+        g.appendChild(leaf);
+      });
+
+      svg.appendChild(g);
+    });
+
+    /* ---- today's bud: the newest leaf, still opening ---- */
+    var newest = days[days.length - 1];
+    var bud = el("circle", {
+      cx: t2.x, cy: tipY - 4, r: "3.4",
+      fill: colorAt((newest.min + newest.max) / 2),
+      stroke: "rgba(244,239,230,.5)", "stroke-width": ".8"
+    });
+    var pulse = el("animate", {
+      attributeName: "r", values: "3.1;4.4;3.1", dur: "3.6s", repeatCount: "indefinite"
+    });
+    bud.appendChild(pulse);
+    svg.appendChild(bud);
+
+    var canvas = document.getElementById("canvas");
+    var msg = document.getElementById("msg");
+    if (msg) msg.remove();
+    var old = canvas.querySelector("svg");
+    if (old) old.remove();
+    canvas.insertBefore(svg, document.getElementById("tip"));
+
+    wireTooltip(svg);
+    return { coldest: coldest, warmest: warmest, newest: newest, months: months.length };
+  }
+
+  function prettyDate(s){
+    var p = s.split("-");
+    return MON_LONG[+p[1]-1] + " " + (+p[2]) + ", " + p[0];
+  }
+
+  /* ------------------------------ tooltip ------------------------------ */
+  function wireTooltip(svg){
+    var tip = document.getElementById("tip");
+    var canvas = document.getElementById("canvas");
+
+    function show(leaf){
+      var d = leaf.getAttribute("data-date");
+      var lo = Math.round(+leaf.getAttribute("data-min"));
+      var hi = Math.round(+leaf.getAttribute("data-max"));
+      tip.innerHTML =
+        '<div class="d">' + prettyDate(d) + '</div>' +
+        '<div class="t">' +
+          '<span class="sw" style="background:' + colorAt(lo) + '"></span>' + lo + '°' +
+          '<span style="opacity:.4;padding:0 .5em">to</span>' +
+          '<span class="sw" style="background:' + colorAt(hi) + '"></span>' + hi + '°' +
+        '</div>';
+
+      var lb = leaf.getBoundingClientRect();
+      var cb = canvas.getBoundingClientRect();
+      tip.style.left = (lb.left - cb.left + canvas.scrollLeft + lb.width/2) + "px";
+      tip.style.top  = (lb.top  - cb.top  + lb.height/2) + "px";
+      tip.classList.add("on");
+    }
+    function hide(){ tip.classList.remove("on"); }
+
+    svg.addEventListener("mouseover", function(e){
+      var leaf = e.target.closest(".leaf");
+      if (leaf) show(leaf);
+    });
+    svg.addEventListener("mouseout", function(e){
+      if (e.target.closest(".leaf")) hide();
+    });
+    svg.addEventListener("focusin", function(e){
+      var leaf = e.target.closest(".leaf");
+      if (leaf) show(leaf);
+    });
+    svg.addEventListener("focusout", hide);
+    svg.addEventListener("touchstart", function(e){
+      var leaf = e.target.closest(".leaf");
+      if (leaf){ show(leaf); } else { hide(); }
+    }, { passive: true });
+  }
+
+  /* ------------------------------- stats ------------------------------- */
+  function renderStats(days, info){
+    var wrap = document.getElementById("stats");
+    var newest = info.newest;
+    /* In the first few days "coldest" and "warmest" just restate the only
+       readings there are, so leave them out until they mean something. */
+    var cells = days.length < 5
+      ? [
+          [days.length === 1 ? "Day" : "Days", days.length, ""],
+          ["Low today", Math.round(newest.min), "°"],
+          ["High today", Math.round(newest.max), "°"]
+        ]
+      : [
+          ["Days", days.length, ""],
+          ["Coldest", Math.round(info.coldest.min), "°"],
+          ["Warmest", Math.round(info.warmest.max), "°"],
+          ["Latest low", Math.round(newest.min), "°"],
+          ["Latest high", Math.round(newest.max), "°"]
+        ];
+    wrap.innerHTML = cells.map(function(c){
+      return '<div class="stat"><span class="v">' + c[1] +
+             '<span class="u">' + c[2] + '</span></span>' +
+             '<span class="k">' + c[0] + '</span></div>';
+    }).join("");
+  }
+
+  /* ------------------------------- legend ------------------------------ */
+  function renderLegend(){
+    var stops = RAMP.map(function(a){
+      var pct = ((a[0] - (-50)) / (115 - (-50))) * 100;
+      return colorAt(a[0]) + " " + pct.toFixed(1) + "%";
+    }).join(", ");
+    document.getElementById("legendBar").style.background =
+      "linear-gradient(90deg, " + stops + ")";
+    document.getElementById("legendTicks").innerHTML =
+      [-50, -20, 10, 32, 60, 85, 110].map(function(t){
+        return "<span>" + t + "°</span>";
+      }).join("");
+  }
+
+  /* -------------------------------- boot ------------------------------- */
+  function fail(text){
+    var canvas = document.getElementById("canvas");
+    var msg = document.getElementById("msg");
+    if (!msg){
+      msg = document.createElement("div");
+      msg.className = "msg";
+      canvas.insertBefore(msg, document.getElementById("tip"));
+    }
+    msg.innerHTML = text;
+  }
+
+  function canvasWidth(){
+    var c = document.getElementById("canvas");
+    return (c && c.clientWidth) || window.innerWidth || 900;
+  }
+
+  /* Row spacing is derived from the viewport, so the tree is rebuilt on any
+     real size change — not just when it crosses the phone/desktop threshold.
+     Ignore the tiny height jitter mobile browsers emit as their toolbars
+     hide and show, or the tree would redraw while you scroll. */
+  function watchResize(getDays){
+    var lastW = window.innerWidth, lastH = window.innerHeight, timer = null;
+    window.addEventListener("resize", function(){
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        var w = window.innerWidth, h = window.innerHeight;
+        if (w === lastW && Math.abs(h - lastH) < 90) return;
+        lastW = w; lastH = h;
+        setLayout(canvasWidth());
+        var d = getDays();
+        if (d && d.length) renderStats(d, draw(d));
+      }, 180);
+    });
+  }
+
+  function start(){
+    renderLegend();
+    setLayout(canvasWidth());
+
+    var today = new Date();
+    var startD = parseISO(WEDDING_DATE);
+
+    if (startD > today){
+      fail("The tree begins on " + prettyDate(WEDDING_DATE) +
+           ".<br>Its first leaf will open that morning.");
+      document.getElementById("stats").innerHTML = "";
+      return;
+    }
+
+    var shown = null;
+    var cached = readCache();
+    if (cached){
+      try { renderStats(cached, draw(cached)); shown = cached; } catch(e){}
+    }
+    watchResize(function(){ return shown; });
+
+    loadDays(WEDDING_DATE, iso(today)).then(function(days){
+      if (!days.length){
+        if (!shown) fail("The weather could not be reached just now.<br>Please try again in a moment.");
+        return;
+      }
+      writeCache(days);
+      shown = days;
+      renderStats(days, draw(days));
+    }).catch(function(){
+      if (!shown) fail("The weather could not be reached just now.<br>Please try again in a moment.");
+    });
+  }
+
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>
