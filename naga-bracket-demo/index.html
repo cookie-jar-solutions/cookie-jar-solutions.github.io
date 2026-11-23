@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bracket Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>Bracket Generator</h1>
+      <nav class="steps" aria-label="Steps">
+        <button class="stepper" data-go="1"><span class="dot">1</span><span class="lbl">Fighters</span></button>
+        <span class="bar"></span>
+        <button class="stepper" data-go="2"><span class="dot">2</span><span class="lbl">Setup</span></button>
+        <span class="bar"></span>
+        <button class="stepper" data-go="3"><span class="dot">3</span><span class="lbl">Brackets</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Step 1 -->
+    <section class="step" id="step1">
+      <h2>Step 1: Add fighters</h2>
+      <p class="hint">Make a list of fake fighters, or upload your own list (CSV file).</p>
+
+      <div class="choice-cards">
+        <div class="card">
+          <h3>Make fake fighters</h3>
+          <label class="field">How many?
+            <input type="number" id="fakeCount" value="1000" min="2" max="5000" inputmode="numeric">
+          </label>
+          <button id="btnFake" class="btn primary">Make fighters</button>
+        </div>
+        <div class="card">
+          <h3>Upload a list</h3>
+          <p class="hint small">A CSV file with the same columns as <code>sample_fighters.csv</code>.</p>
+          <label class="btn" for="csvFile">Choose CSV file</label>
+          <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+        </div>
+      </div>
+
+      <div id="fighterStatus" class="status" hidden></div>
+
+      <div class="nav">
+        <span></span>
+        <button class="btn primary big" data-go="2" id="next1" disabled>Next: Setup &rarr;</button>
+      </div>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="step" id="step2" hidden>
+      <h2>Step 2: Tournament setup</h2>
+      <p class="hint">Tick what this tournament includes.</p>
+
+      <div class="group">
+        <h3>Gender</h3>
+        <div id="cfgGenders" class="checks"></div>
+      </div>
+      <div class="group">
+        <h3>Gi / No-Gi</h3>
+        <div id="cfgEvents" class="checks"></div>
+      </div>
+      <div class="group">
+        <h3>Age groups</h3>
+        <div id="cfgAges" class="checks"></div>
+      </div>
+      <div class="group">
+        <h3>How many experience levels?</h3>
+        <p class="hint small">Fighters are split into this many equal groups by Elo score, within each age group and gender. Level 1 is the lowest scores.</p>
+        <div id="cfgLevels" class="pills" role="radiogroup" aria-label="Experience levels"></div>
+      </div>
+
+      <div id="configError" class="status bad" hidden></div>
+
+      <div class="nav">
+        <button class="btn big" data-go="1">&larr; Back</button>
+        <button class="btn primary big" id="btnBuild">Generate brackets</button>
+      </div>
+    </section>
+
+    <!-- Step 3 -->
+    <section class="step" id="step3" hidden>
+      <h2>Step 3: Brackets</h2>
+
+      <div class="filters">
+        <input type="search" id="fSearch" placeholder="Search a fighter or gym" aria-label="Search">
+        <select id="fEvent" aria-label="Gi or No-Gi"></select>
+        <select id="fGender" aria-label="Gender"></select>
+        <select id="fAge" aria-label="Age group"></select>
+      </div>
+      <p id="shownCount" class="hint small"></p>
+
+      <div id="list"></div>
+
+      <section id="unmatched" class="unmatched"></section>
+
+      <div class="nav">
+        <button class="btn big" data-go="2">&larr; Back to setup</button>
+        <span></span>
+      </div>
+    </section>
+  </main>
+
+  <div id="loading" class="loading" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loadingText">Building brackets…</p>
+  </div>
+
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
